@@ -1,7 +1,6 @@
 package com.andrew.expensemanagerapp.dao;
 
 import com.andrew.expensemanagerapp.entity.Expense;
-import com.andrew.expensemanagerapp.request.ExpenseRequest;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
