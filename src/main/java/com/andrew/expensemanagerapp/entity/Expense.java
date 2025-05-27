@@ -3,6 +3,7 @@ package com.andrew.expensemanagerapp.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity(name = "Expense")
 @Table(name = "expense")
 @Data
+@NoArgsConstructor
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +40,13 @@ public class Expense {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Expense(String name, String description, Double amount, String category,
+                   String date){
+        this.name = name;
+        this.description = description;
+        this.amount = amount;
+        this.category = category;
+        this.date = date;
+    }
 }
