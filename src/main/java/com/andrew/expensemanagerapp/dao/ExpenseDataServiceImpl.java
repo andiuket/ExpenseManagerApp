@@ -1,29 +1,40 @@
 package com.andrew.expensemanagerapp.dao;
 
 import com.andrew.expensemanagerapp.entity.Expense;
-import com.andrew.expensemanagerapp.request.ExpenseRequest;
+import com.andrew.expensemanagerapp.repository.ExpenseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.stereotype.Repository;
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public class ExpenseDataServiceImpl implements ExpenseDao {
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
+
     @Override
     public List<Expense> getAllExpenses(int pageNumber, int pageSize) {
-        return List.of();
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC);
+        return expenseRepository.findAll(pageable).getContent();
     }
 
     @Override
-    public Expense getExpense(Long id) {
+    public Optional<Expense> getExpense(Long id) {
+        return expenseRepository.findById(id);
+    }
+
+    @Override
+    public Expense addExpense(Expense expense) {
         return null;
     }
 
     @Override
-    public Expense addExpense(ExpenseRequest expenseRequest) {
-        return null;
-    }
-
-    @Override
-    public Expense updateExpense(Long id, ExpenseRequest expenseRequest) {
+    public Expense updateExpense(Long id, Expense expense) {
         return null;
     }
 

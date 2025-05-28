@@ -2,6 +2,7 @@ package com.andrew.expensemanagerapp.controller;
 
 import com.andrew.expensemanagerapp.entity.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody User user){
+    public String registerUser(@Validated @RequestBody User user){
         return "";
     }
 
