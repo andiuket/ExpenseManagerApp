@@ -1,11 +1,13 @@
 package com.andrew.expensemanagerapp.controller;
 
+import com.andrew.expensemanagerapp.dto.UserDto;
 import com.andrew.expensemanagerapp.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
 
@@ -27,12 +29,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@Validated @RequestBody User user){
+    public String registerUser(@Validated @RequestBody UserDto userDto){
         return "";
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user){
+    public User updateUser(@PathVariable Long id, @RequestBody UserDto userDto){
         return null;
     }
 

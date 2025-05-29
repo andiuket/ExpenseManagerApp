@@ -1,8 +1,8 @@
 package com.andrew.expensemanagerapp.controller;
 
+import com.andrew.expensemanagerapp.dto.ExpenseDto;
 import com.andrew.expensemanagerapp.entity.Expense;
 import com.andrew.expensemanagerapp.service.ExpenseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +28,7 @@ public class ExpenseController {
         return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/expense/{id}")
     public ResponseEntity<Expense> getExpense(@PathVariable Long id){
         Expense expense = expenseService.getExpense(id);
         if(expense != null ){
@@ -38,25 +38,25 @@ public class ExpenseController {
 
     }
 
-    @PostMapping("")
-    public ResponseEntity<Expense> addExpense(@Validated @RequestBody Expense expense){
-        Expense newExpense = expenseService.addExpense(expense);
+    @PostMapping("/expenses")
+    public ResponseEntity<Expense> addExpense(@Validated @RequestBody ExpenseDto expenseDto){
+        Expense newExpense = expenseService.addExpense(expenseDto);
         if(newExpense != null ){
-            return new ResponseEntity<>(expenseService.addExpense(expense), HttpStatus.CREATED);
+            return new ResponseEntity<>(expenseService.addExpense(expenseDto), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateExpense(@PathVariable Long id, @RequestBody Expense expense) {
-        Expense updateExpense = expenseService.updateExpense(expense);
+    @PutMapping("/expense/{id}")
+    public ResponseEntity<String> updateExpense(@PathVariable Long id, @RequestBody ExpenseDto expenseDto) {
+        Expense updateExpense = expenseService.updateExpense(expenseDto);
         if(updateExpense != null ){
             return new ResponseEntity<>("Update was successful", HttpStatus.OK);
         }
         return new ResponseEntity<>("Update wasn't successful", HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/expense/{id}")
     public ResponseEntity<Integer> deleteExpense(@PathVariable Long id){
         Integer status = expenseService.deleteExpense(id);
         if(status == 1){
@@ -65,17 +65,17 @@ public class ExpenseController {
         return new ResponseEntity<>(expenseService.deleteExpense(id), HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/filterbyCategory")
+    @GetMapping("/expenses/filterbyCategory")
     public ResponseEntity<List<Expense>> getExpenseByCategory(@RequestParam String category){
         return new ResponseEntity<List<Expense>>(expenseService.getExpenseByCategory(category), HttpStatus.OK);
     }
 
-    @GetMapping("/filterbykeyword")
+    @GetMapping("/expenses/filterbykeyword")
     public ResponseEntity<List<Expense>> getExpenseByKeyWord(@RequestParam String word){
         return new ResponseEntity<List<Expense>>(expenseService.getExpenseByKeyWord(word), HttpStatus.OK);
     }
 
-    @GetMapping("/filterByDate")
+    @GetMapping("/expenses/filterByDate")
     public ResponseEntity<List<Expense>> getExpenseByDate(@RequestParam String date){
         return new ResponseEntity<List<Expense>>(expenseService.getExpenseByDate(date), HttpStatus.OK);
     }

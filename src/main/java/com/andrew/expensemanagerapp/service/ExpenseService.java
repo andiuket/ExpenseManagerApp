@@ -1,6 +1,7 @@
 package com.andrew.expensemanagerapp.service;
 
 
+import com.andrew.expensemanagerapp.dto.ExpenseDto;
 import com.andrew.expensemanagerapp.entity.Expense;
 import com.andrew.expensemanagerapp.repository.ExpenseRepository;
 import org.springframework.data.domain.PageRequest;
@@ -29,11 +30,11 @@ public class ExpenseService {
         return null;
     }
 
-    public Expense addExpense(Expense expense) {
+    public Expense addExpense(ExpenseDto expenseDto) {
         return null;
     }
 
-    public Expense updateExpense(Expense expense) {
+    public Expense updateExpense(ExpenseDto expenseDto) {
         return null;
     }
 

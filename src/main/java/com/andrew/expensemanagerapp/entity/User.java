@@ -2,6 +2,7 @@ package com.andrew.expensemanagerapp.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
@@ -9,8 +10,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity(name = "User")
-@Table(name = "user")
+@Table(name = "tbl_user")
 @Data
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
