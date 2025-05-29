@@ -1,8 +1,11 @@
 package com.andrew.expensemanagerapp.service;
 
-import com.andrew.expensemanagerapp.dao.ExpenseDao;
+
 import com.andrew.expensemanagerapp.entity.Expense;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.andrew.expensemanagerapp.repository.ExpenseRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -10,12 +13,16 @@ import java.util.List;
 @Service
 public class ExpenseService {
 
-    @Autowired
-    private ExpenseDao expenseDao;
+    private ExpenseRepository expenseRepository;
+
+    public ExpenseService(ExpenseRepository expenseRepository){
+        this.expenseRepository = expenseRepository;
+    }
 
 
     public List<Expense> getAllExpenses(int pageNumber, int pageSize) {
-        return expenseDao.getAllExpenses(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC);
+        return expenseRepository.findAll(pageable).getContent();
     }
 
     public Expense getExpense(Long id) {

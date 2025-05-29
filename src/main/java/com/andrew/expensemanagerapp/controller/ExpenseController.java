@@ -12,8 +12,11 @@ import java.util.List;
 @RestController
 public class ExpenseController {
 
-    @Autowired
     private ExpenseService expenseService;
+
+    public ExpenseController(ExpenseService expenseService){
+        this.expenseService = expenseService;
+    }
 
 
     @GetMapping("/expenses")
