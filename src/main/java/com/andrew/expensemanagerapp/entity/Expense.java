@@ -2,16 +2,20 @@ package com.andrew.expensemanagerapp.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity(name = "Expense")
 @Table(name = "expense")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +39,9 @@ public class Expense {
             nullable = false,
             updatable = false
     )
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
 }

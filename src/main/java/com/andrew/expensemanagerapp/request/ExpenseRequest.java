@@ -1,6 +1,7 @@
-package com.andrew.expensemanagerapp.dto;
+package com.andrew.expensemanagerapp.request;
 
-public record ExpenseDto(
+
+public record ExpenseRequest(
         String name,
         String description,
         Double amount,
