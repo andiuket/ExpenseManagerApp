@@ -1,40 +1,45 @@
 package com.andrew.expensemanagerapp.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.time.LocalDateTime;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
+import java.sql.Timestamp;
 
-@Entity(name = "User")
+
+
+@Entity
 @Table(name = "tbl_user")
+@Builder
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull()
     private String name;
-
-    @Email(message = "Please provide a valid email address")
+    @Column(unique = true)
+    private String userId;
+    @Column(unique = true)
     private String email;
-
-    private Integer age;
-
+    private String password;
+    private String verifyOtp;
+    private boolean isAccountVerified;
+    private Long verifyOtpExpireAt;
+    private String resetOtp;
+    private Long resetOtpExpireAt;
     @CreationTimestamp
     @Column(
             name = "created_at",
             nullable = false,
             updatable = false
     )
-    private LocalDateTime createdAt;
-
+    private Timestamp createdAt;
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    private Timestamp updatedAt;
 }
