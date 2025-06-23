@@ -1,21 +1,22 @@
 package com.andrew.expensemanagerapp.controller;
 
-import com.andrew.expensemanagerapp.request.ProfileRequest;
-import com.andrew.expensemanagerapp.entity.User;
-import com.andrew.expensemanagerapp.request.ProfileResponse;
-import com.andrew.expensemanagerapp.service.ProfileService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.andrew.expensemanagerapp.io.UserRequest;
+import com.andrew.expensemanagerapp.io.UserResponse;
+import com.andrew.expensemanagerapp.service.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
-    @Autowired
-    private ProfileService profileService;
+    private final UserService userService;
+
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     @Value("${app.name: Expense Manager}")
     private String appName;
@@ -29,25 +30,10 @@ public class UserController {
     }
 
 
-    @GetMapping
-    public User getUser(){
-        return null;
-    }
-
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ProfileResponse registerUser(@Valid @RequestBody ProfileRequest request){
-        ProfileResponse profile = profileService.createProfile(request);
-        return profile;
+    public UserResponse registerUser(@RequestBody UserRequest request){
+        return userService.registerUser(request);
     }
 
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody ProfileRequest userDto){
-        return null;
-    }
-
-    @DeleteMapping("/{id}")
-    public Integer deleteUser(@PathVariable Long id){
-        return 0;
-    }
 }
