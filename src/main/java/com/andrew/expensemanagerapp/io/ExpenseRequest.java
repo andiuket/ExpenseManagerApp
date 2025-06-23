@@ -1,4 +1,4 @@
-package com.andrew.expensemanagerapp.request;
+package com.andrew.expensemanagerapp.io;
 
 
 public record ExpenseRequest(

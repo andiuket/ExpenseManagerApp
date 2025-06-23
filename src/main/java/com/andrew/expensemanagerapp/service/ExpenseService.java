@@ -1,8 +1,9 @@
 package com.andrew.expensemanagerapp.service;
 
 
+import com.andrew.expensemanagerapp.exception.RequestValidationException;
 import com.andrew.expensemanagerapp.exception.ResourceNotFoundException;
-import com.andrew.expensemanagerapp.request.ExpenseRequest;
+import com.andrew.expensemanagerapp.io.ExpenseRequest;
 import com.andrew.expensemanagerapp.entity.Expense;
 import com.andrew.expensemanagerapp.repository.ExpenseRepository;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +43,7 @@ public class ExpenseService {
 
         return expenseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Customer with id [%s] not found".formatted(id)));
+                        "Expense with id [%s] not found".formatted(id)));
     }
 
     public Expense addExpense(ExpenseRequest request) {
@@ -64,22 +65,47 @@ public class ExpenseService {
     public Expense updateExpense(Long id, ExpenseRequest request) {
        Optional<Expense> expense = expenseRepository.findById(id);
        if(expense.isPresent()) {
+           boolean changes = false;
            Expense ex = expense.get();
-           ex.setName(request.name());
-           ex.setAmount(request.amount());
-           ex.setCategory(request.category());
-           ex.setDescription(request.description());
-           ex.setDate(request.date());
+           if(request.name() != null && !request.name().equals(ex.getName())){
+               ex.setName(request.name());
+               expenseRepository.save(ex);
+               changes = true;
+           }
+           if(request.amount() != null && !request.amount().equals(ex.getAmount())){
+               ex.setAmount(request.amount());
+               expenseRepository.save(ex);
+               changes = true;
+           }
+           if(request.description() != null && !request.description().equals(ex.getDescription())){
+               ex.setDescription(request.description());
+               expenseRepository.save(ex);
+               changes = true;
+           }
+           if(request.category() != null && !request.category().equals(ex.getCategory())){
+               ex.setCategory(request.category());
+               expenseRepository.save(ex);
+               changes = true;
+           }
+
+           if(request.date() != null && !request.date().equals(ex.getDate())){
+               ex.setDate(request.date());
+               expenseRepository.save(ex);
+               changes = true;
+           }
+           if(!changes){
+               throw new RequestValidationException("No data Changes found");
+           }
            expenseRepository.save(ex);
            return ex;
        }
-       throw new ResourceNotFoundException("");
+       throw new ResourceNotFoundException("Expense with id [%s] not found");
     }
 
     public void deleteExpense(Long id) {
         Optional<Expense> optionalExpense = expenseRepository.findById(id);
         if(optionalExpense.isEmpty()){
-            throw new ResourceNotFoundException("");
+            throw new ResourceNotFoundException("Expense with id not found");
         }
         expenseRepository.deleteById(id);
     }
@@ -88,8 +114,8 @@ public class ExpenseService {
         return expenseRepository.findExpensesByCategory(category);
     }
 
-    public List<Expense> getExpenseByKeyWord(String word) {
-        return expenseRepository.findExpensesByKeyWord(word);
+    public Expense getExpenseByName(String word) {
+        return expenseRepository.findExpenseByName(word);
     }
 
     public List<Expense> getExpenseByDate(String date) {

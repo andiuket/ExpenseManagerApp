@@ -1,6 +1,6 @@
 package com.andrew.expensemanagerapp.controller;
 
-import com.andrew.expensemanagerapp.dto.ExpenseDto;
+import com.andrew.expensemanagerapp.io.ExpenseRequest;
 import com.andrew.expensemanagerapp.entity.Expense;
 import com.andrew.expensemanagerapp.service.ExpenseService;
 import org.springframework.http.HttpStatus;
@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ExpenseController {
 
-    private ExpenseService expenseService;
+    private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService){
         this.expenseService = expenseService;
@@ -20,10 +21,15 @@ public class ExpenseController {
 
 
     @GetMapping("/expenses")
-    public ResponseEntity<List<Expense>> getAllExpenses(@RequestParam int pageNumber, @RequestParam int pageSize){
-        List<Expense> expenses = expenseService.getAllExpenses(pageNumber, pageSize);
+    public ResponseEntity<List<Expense>> getAllExpenses(
+            @RequestParam(defaultValue = "0") int pNum,
+            @RequestParam(defaultValue = "5") int pSize,
+            @RequestParam(defaultValue = "asc") String dir,
+            @RequestParam(defaultValue = "is") String sortBy
+    ){
+        List<Expense> expenses = expenseService.getAllExpenses(pNum, pSize, dir, sortBy);
         if(expenses != null){
-            return new ResponseEntity<List<Expense>>(expenseService.getAllExpenses(pageNumber, pageSize), HttpStatus.OK);
+            return new ResponseEntity<List<Expense>>(expenseService.getAllExpenses(pNum, pSize, dir, sortBy), HttpStatus.OK);
         }
         return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
@@ -39,17 +45,17 @@ public class ExpenseController {
     }
 
     @PostMapping("/expenses")
-    public ResponseEntity<Expense> addExpense(@Validated @RequestBody ExpenseDto expenseDto){
-        Expense newExpense = expenseService.addExpense(expenseDto);
+    public ResponseEntity<Expense> addExpense(@Validated @RequestBody ExpenseRequest request){
+        Expense newExpense = expenseService.addExpense(request);
         if(newExpense != null ){
-            return new ResponseEntity<>(expenseService.addExpense(expenseDto), HttpStatus.CREATED);
+            return new ResponseEntity<>(newExpense, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/expense/{id}")
-    public ResponseEntity<String> updateExpense(@PathVariable Long id, @RequestBody ExpenseDto expenseDto) {
-        Expense updateExpense = expenseService.updateExpense(expenseDto);
+    public ResponseEntity<String> updateExpense(@PathVariable Long id, @RequestBody ExpenseRequest request) {
+        Expense updateExpense = expenseService.updateExpense( id,request);
         if(updateExpense != null ){
             return new ResponseEntity<>("Update was successful", HttpStatus.OK);
         }
@@ -57,12 +63,9 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/expense/{id}")
-    public ResponseEntity<Integer> deleteExpense(@PathVariable Long id){
-        Integer status = expenseService.deleteExpense(id);
-        if(status == 1){
-            return new ResponseEntity<>(expenseService.deleteExpense(id), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(expenseService.deleteExpense(id), HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> deleteExpense(@PathVariable Long id){
+        expenseService.deleteExpense(id);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @GetMapping("/expenses/filterbyCategory")
@@ -70,9 +73,9 @@ public class ExpenseController {
         return new ResponseEntity<List<Expense>>(expenseService.getExpenseByCategory(category), HttpStatus.OK);
     }
 
-    @GetMapping("/expenses/filterbykeyword")
-    public ResponseEntity<List<Expense>> getExpenseByKeyWord(@RequestParam String word){
-        return new ResponseEntity<List<Expense>>(expenseService.getExpenseByKeyWord(word), HttpStatus.OK);
+    @GetMapping("/expenses/filterbyname")
+    public ResponseEntity<Expense> getExpenseByKeyWord(@RequestParam String word){
+        return new ResponseEntity<Expense>(expenseService.getExpenseByName(word), HttpStatus.OK);
     }
 
     @GetMapping("/expenses/filterByDate")
